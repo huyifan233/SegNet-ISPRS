@@ -11,7 +11,7 @@ CACHE = True
 if __name__ == "__main__":
     # CLIENT_ID = int(sys.argv[1])
 
-    train_ids = ['1', '3', '23', '26', '7', '11', '13', '28', '17', '32', '34', '37']
+    train_ids = ['7', '11', '13', '28']
     test_ids = ['5', '21', '15', '30']
 
     train_set = ISPRS_dataset(train_ids, cache=CACHE)
