@@ -23,8 +23,10 @@ if __name__ == "__main__":
     gfl_models = client.get_remote_gfl_models()
 
     for gfl_model in gfl_models:
-        optimizer = torch.optim.SGD(gfl_model.get_model().parameters(), lr=0.01, momentum=0.5)
-        train_strategy = TrainStrategy(optimizer=optimizer, batch_size=32, loss_function=LossStrategy.NLL_LOSS)
+        optimizer = torch.optim.SGD(gfl_model.get_model().parameters(), lr=0.01, momentum=0.9, weight_decay=0.0005)
+        scheduler = torch.optim.lr_scheduler(optimizer, [25, 35, 45], gamma=0.1)
+        train_strategy = TrainStrategy(optimizer=optimizer, scheduler=scheduler, batch_size=32,
+                                       loss_function=LossStrategy.NLL_LOSS)
         gfl_model.set_train_strategy(train_strategy)
 
     TrainerController(work_mode=WorkModeStrategy.WORKMODE_STANDALONE, models=gfl_models, data=train_set, client_id=CLIENT_ID,
