@@ -3,7 +3,7 @@ import os
 import torch
 import random
 import numpy as np
-import io
+from skimage import io
 
 FOLDER = "../ISPRS_dataset/"
 MAIN_FOLDER = FOLDER + 'Potsdam/'
