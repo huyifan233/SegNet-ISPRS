@@ -5,7 +5,7 @@ import random
 import numpy as np
 import io
 
-FOLDER = "./ISPRS_dataset/"
+FOLDER = "../ISPRS_dataset/"
 MAIN_FOLDER = FOLDER + 'Potsdam/'
 DATA_FOLDER = MAIN_FOLDER + '3_Ortho_IRRG/top_potsdam_{}_IRRG.tif'
 LABEL_FOLDER = MAIN_FOLDER + '5_Labels_for_participants/top_potsdam_{}_label.tif'
