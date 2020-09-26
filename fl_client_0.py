@@ -25,9 +25,6 @@ def CrossEntropy2d(input, target, weight=None, size_average=True):
 def accuracy(output, target):
     pred = np.argmax(output.data.cpu().numpy()[0], axis=0)
     gt = target.data.cpu().numpy()[0]
-    print("pred: ", pred)
-    print("gt: ", gt)
-    print("target_size: ", target.size)
     return 100 * float(np.count_nonzero(pred == gt)) / gt.size
 
 
