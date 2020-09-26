@@ -1,5 +1,5 @@
 import torch
-from isprs_dataset_win import ISPRS_dataset
+from isprs_dataset import ISPRS_dataset
 from gfl.core.client import FLClient
 from gfl.core.strategy import WorkModeStrategy, TrainStrategy, LossStrategy
 from gfl.core.trainer_controller import TrainerController
