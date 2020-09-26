@@ -104,7 +104,7 @@ class ISPRS_dataset(torch.utils.data.Dataset):
 
 
     @classmethod
-    def get_random_pos(img, window_shape):
+    def get_random_pos(cls, img, window_shape):
         """ Extract of 2D random patch of shape window_shape in the image """
         w, h = window_shape
         W, H = img.shape[-2:]
@@ -115,7 +115,7 @@ class ISPRS_dataset(torch.utils.data.Dataset):
         return x1, x2, y1, y2
 
     @classmethod
-    def convert_to_color(arr_2d, palette=PALETTE):
+    def convert_to_color(cls, arr_2d, palette=PALETTE):
         """ Numeric labels to RGB-color encoding """
         arr_3d = np.zeros((arr_2d.shape[0], arr_2d.shape[1], 3), dtype=np.uint8)
 
@@ -126,7 +126,7 @@ class ISPRS_dataset(torch.utils.data.Dataset):
         return arr_3d
 
     @classmethod
-    def convert_from_color(arr_3d, palette={v: k for k, v in PALETTE.items()}):
+    def convert_from_color(cls, arr_3d, palette={v: k for k, v in PALETTE.items()}):
         """ RGB-color encoding to grayscale labels """
         arr_2d = np.zeros((arr_3d.shape[0], arr_3d.shape[1]), dtype=np.uint8)
 
