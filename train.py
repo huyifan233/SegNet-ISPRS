@@ -68,7 +68,7 @@ def train(net, optimizer, epochs, scheduler=None, weights=WEIGHTS, save_epoch=5)
 
             if iter_ % 100 == 0:
                 # clear_output()
-                rgb = np.asarray(255 * np.transpose(data.data.cpu().numpy()[0], (1, 2, 0)), dtype='uint8')
+                # rgb = np.asarray(255 * np.transpose(data.data.cpu().numpy()[0], (1, 2, 0)), dtype='uint8')
                 pred = np.argmax(output.data.cpu().numpy()[0], axis=0)
                 gt = target.data.cpu().numpy()[0]
                 print('Train (epoch {}/{}) [{}/{} ({:.0f}%)]\tLoss: {:.6f}\tAccuracy: {}'.format(
