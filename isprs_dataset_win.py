@@ -22,7 +22,7 @@ PALETTE = {0 : (255, 255, 255), # Impervious surfaces (white)
 
 class ISPRS_dataset(torch.utils.data.Dataset):
     def __init__(self, ids, data_files=DATA_FOLDER, label_files=LABEL_FOLDER,
-                 cache=False, augmentation=True):
+                 cache=False, augmentation=True, test=False):
         super(ISPRS_dataset, self).__init__()
 
         self.augmentation = augmentation
@@ -30,7 +30,10 @@ class ISPRS_dataset(torch.utils.data.Dataset):
 
         # List of files
         self.data_files = [DATA_FOLDER.format(id) for id in ids]
-        self.label_files = [LABEL_FOLDER.format(id) for id in ids]
+        if not test:
+            self.label_files = [LABEL_FOLDER.format(id) for id in ids]
+        else:
+            self.label_files = [ERODED_FOLDER.format(id) for id in ids]
 
         # Sanity check : raise an error if some files do not exist
         for f in self.data_files + self.label_files:
