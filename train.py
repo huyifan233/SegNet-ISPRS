@@ -34,7 +34,7 @@ palette = {0 : (255, 255, 255), # Impervious surfaces (white)
            5 : (255, 0, 0),     # Clutter (red)
            6 : (0, 0, 0)}       # Undefined (black)
 
-MAIN_FOLDER = '../Potsdam/'
+MAIN_FOLDER = '../ISPRS_dataset/Potsdam/'
 DATA_FOLDER = MAIN_FOLDER + '3_Ortho_IRRG/top_potsdam_{}_IRRG.tif'
 LABEL_FOLDER = MAIN_FOLDER + '5_Labels_for_participants/top_potsdam_{}_label.tif'
 ERODED_FOLDER = MAIN_FOLDER + '5_Labels_for_participants_no_Boundary/top_potsdam_{}_label_noBoundary.tif'
@@ -107,33 +107,13 @@ def metrics(predictions, gts, label_values=LABELS):
         predictions,
         range(len(label_values)))
 
-    # print("Confusion matrix :")
-    # print(cm)
-    #
-    # print("---")
+
 
     # Compute global accuracy
     total = sum(sum(cm))
     accuracy = sum([cm[x][x] for x in range(len(cm))])
     accuracy *= 100 / float(total)
-    # print("{} pixels processed".format(total))
-    # print("Total accuracy : {}%".format(accuracy))
-    #
-    # print("---")
     return accuracy
-    # Compute F1 score
-    # F1Score = np.zeros(len(label_values))
-    # for i in range(len(label_values)):
-    #     try:
-    #         F1Score[i] = 2. * cm[i, i] / (np.sum(cm[i, :]) + np.sum(cm[:, i]))
-    #     except:
-    #         # Ignore exception if there is no element in class i for test set
-    #         pass
-    # print("F1Score :")
-    # for l_id, score in enumerate(F1Score):
-    #     print("{}: {}".format(label_values[l_id], score))
-    #
-    # print("---")
 
 def test(net, test_ids, all=False, stride=WINDOW_SIZE[0], batch_size=BATCH_SIZE, window_size=WINDOW_SIZE):
     # Use the network on the test set
@@ -152,19 +132,6 @@ def test(net, test_ids, all=False, stride=WINDOW_SIZE[0], batch_size=BATCH_SIZE,
         # total = count_sliding_window(img, step=stride, window_size=window_size) // batch_size
         for i, coords in enumerate(
                 grouper(batch_size, sliding_window(img, step=stride, window_size=window_size))):
-            # Display in progress results
-            # if i > 0 and total > 10 and i % int(10 * total / 100) == 0:
-            #     _pred = np.argmax(pred, axis=-1)
-                # fig = plt.figure(figsize=(10, 5))
-                # fig.add_subplot(1, 3, 1)
-                # plt.imshow(np.asarray(255 * img, dtype='uint8'))
-                # fig.add_subplot(1, 3, 2)
-                # plt.imshow(convert_to_color(_pred))
-                # fig.add_subplot(1, 3, 3)
-                # plt.imshow(gt)
-                # clear_output()
-                # plt.show()
-
             # Build the tensor
             image_patches = [np.copy(img[x:x + w, y:y + h]).transpose((2, 0, 1)) for x, y, w, h in coords]
             image_patches = np.asarray(image_patches)
@@ -182,16 +149,6 @@ def test(net, test_ids, all=False, stride=WINDOW_SIZE[0], batch_size=BATCH_SIZE,
 
         pred = np.argmax(pred, axis=-1)
 
-        # Display the result
-        # clear_output()
-        # fig = plt.figure()
-        # fig.add_subplot(1, 3, 1)
-        # plt.imshow(np.asarray(255 * img, dtype='uint8'))
-        # fig.add_subplot(1, 3, 2)
-        # plt.imshow(convert_to_color(pred))
-        # fig.add_subplot(1, 3, 3)
-        # plt.imshow(gt)
-        # plt.show()
 
         all_preds.append(pred)
         all_gts.append(gt_e)
@@ -245,37 +202,16 @@ def train(net, optimizer, epochs, scheduler=None, weights=WEIGHTS, save_epoch=1)
                     e, epochs, batch_idx, len(train_loader),
                     100. * batch_idx / len(train_loader), loss.item(), accuracy(pred, gt)))
 
-
-                # plt.plot(mean_losses[:iter_]) and plt.show()
-                # fig = plt.figure()
-                # fig.add_subplot(131)
-                # plt.imshow(rgb)
-                # plt.title('RGB')
-                # fig.add_subplot(132)
-                # plt.imshow(convert_to_color(gt))
-                # plt.title('Ground truth')
-                # fig.add_subplot(133)
-                # plt.title('Prediction')
-                # plt.imshow(convert_to_color(pred))
-                # plt.show()
             iter_ += 1
 
             del (data, target, loss)
 
         if e % save_epoch == 0:
-            # We validate with the largest possible stride for faster computing
-            net.eval()
-            # for batch_idx, (data, target) in enumerate(test_loader):
-            #     data, target = Variable(data.cuda()), Variable(target.cuda())
-            #     output = net(data)
-            #     pred = np.argmax(output.data.cpu().numpy()[0], axis=0)
-            #     gt = target.data.cpu().numpy()[0]
-            #     test_acc = accuracy(pred, gt)
+
             test_acc = test(net, test_ids, all=False, stride=min(WINDOW_SIZE))
             print("test accuracy: {}".format(test_acc))
         #     torch.save(net.state_dict(), './segnet256_epoch{}_{}'.format(e, acc))
     # torch.save(net.state_dict(), './segnet_final')
-
 
 def main():
     base_lr = 0.01
