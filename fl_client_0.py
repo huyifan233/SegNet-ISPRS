@@ -33,6 +33,8 @@ ERODED_FOLDER = MAIN_FOLDER + '5_Labels_for_participants_no_Boundary/top_potsdam
 CLIENT_ID = 0
 CACHE = True
 
+
+
 def CrossEntropy2d(input, target, weight=None, size_average=True):
     """ 2D version of the cross entropy loss """
     dim = input.dim()
@@ -109,12 +111,14 @@ def metrics(predictions, gts, label_values=LABELS):
     accuracy *= 100 / float(total)
     return accuracy
 
+test_ids = ['2_12', '3_12', '4_12', '5_12', '6_12', '7_12']
+# Use the network on the test set
+test_images = (1 / 255 * np.asarray(io.imread(DATA_FOLDER.format(id)), dtype='float32') for id in test_ids)
+test_labels = (np.asarray(io.imread(LABEL_FOLDER.format(id)), dtype='uint8') for id in test_ids)
+eroded_labels = (convert_from_color(io.imread(ERODED_FOLDER.format(id))) for id in test_ids)
+
 def test(net, all=False, stride=WINDOW_SIZE[0], batch_size=BATCH_SIZE, window_size=WINDOW_SIZE):
-    test_ids = ['2_12', '3_12', '4_12', '5_12', '6_12', '7_12']
-    # Use the network on the test set
-    test_images = (1 / 255 * np.asarray(io.imread(DATA_FOLDER.format(id)), dtype='float32') for id in test_ids)
-    test_labels = (np.asarray(io.imread(LABEL_FOLDER.format(id)), dtype='uint8') for id in test_ids)
-    eroded_labels = (convert_from_color(io.imread(ERODED_FOLDER.format(id))) for id in test_ids)
+
     all_preds = []
     all_gts = []
 
