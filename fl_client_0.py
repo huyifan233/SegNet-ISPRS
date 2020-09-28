@@ -179,4 +179,4 @@ if __name__ == "__main__":
         gfl_model.set_train_strategy(train_strategy)
 
     TrainerController(work_mode=WorkModeStrategy.WORKMODE_STANDALONE, models=gfl_models, data=train_set, client_id=CLIENT_ID,
-                      curve=True, concurrent_num=3).start()
+                      curve=True, local_epoch=1, concurrent_num=3).start()
