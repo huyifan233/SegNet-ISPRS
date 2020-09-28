@@ -150,5 +150,5 @@ if __name__ == "__main__":
 
     job_manager = JobManager()
     job = job_manager.generate_job(work_mode=strategy.WorkModeStrategy.WORKMODE_STANDALONE,
-                                   fed_strategy=strategy.FederateStrategy.FED_AVG, epoch=10, model=SegNet)
+                                   fed_strategy=strategy.FederateStrategy.FED_AVG, epoch=50, model=SegNet)
     job_manager.submit_job(job, model)
