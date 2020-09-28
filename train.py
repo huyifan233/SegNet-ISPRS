@@ -21,7 +21,7 @@ from skimage import io
 WINDOW_SIZE = (256, 256) # Patch size
 STRIDE = 32 # Stride for testing
 IN_CHANNELS = 3 # Number of input channels (e.g. RGB)
-BATCH_SIZE = 32
+BATCH_SIZE = 5
 LABELS = ["roads", "buildings", "low veg.", "trees", "cars", "clutter"] # Label names
 N_CLASSES = len(LABELS)
 WEIGHTS = torch.ones(N_CLASSES)
@@ -265,16 +265,16 @@ def train(net, optimizer, epochs, scheduler=None, weights=WEIGHTS, save_epoch=1)
         if e % save_epoch == 0:
             # We validate with the largest possible stride for faster computing
             net.eval()
-            for batch_idx, (data, target) in enumerate(test_loader):
-                data, target = Variable(data.cuda()), Variable(target.cuda())
-                output = net(data)
-                pred = np.argmax(output.data.cpu().numpy()[0], axis=0)
-                gt = target.data.cpu().numpy()[0]
-                test_acc = accuracy(pred, gt)
-        #     # acc = test(net, test_ids, all=False, stride=min(WINDOW_SIZE))
-                print("test accuracy: {}".format(test_acc))
+            # for batch_idx, (data, target) in enumerate(test_loader):
+            #     data, target = Variable(data.cuda()), Variable(target.cuda())
+            #     output = net(data)
+            #     pred = np.argmax(output.data.cpu().numpy()[0], axis=0)
+            #     gt = target.data.cpu().numpy()[0]
+            #     test_acc = accuracy(pred, gt)
+            test_acc = test(net, test_ids, all=False, stride=min(WINDOW_SIZE))
+            print("test accuracy: {}".format(test_acc))
         #     torch.save(net.state_dict(), './segnet256_epoch{}_{}'.format(e, acc))
-    torch.save(net.state_dict(), './segnet_final')
+    # torch.save(net.state_dict(), './segnet_final')
 
 
 def main():
